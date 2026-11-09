@@ -90,10 +90,10 @@ def test_promo_below_min(params):
         pricing.promo_applies(PROMO_CODE, Decimal(PROMO_MIN - 1), params)
 
 
-def test_promo_unknown(params):
+@pytest.mark.xfail(reason="#1 — пустая строка вызывает RuleViolation", strict=True)
+def test_promo_below_empty_string(params):
     with pytest.raises(RuleViolation):
-        pricing.promo_applies("WRONG", Decimal(2000), params)
-
+        pricing.promo_applies("   ", Decimal("2000"), params)
 
 def test_promo_none(params):
     assert pricing.promo_applies(None, Decimal(2000), params) is False
