@@ -1,0 +1,41 @@
+name: Баг-репорт
+description: Сообщить о дефекте в «Книжной лавке»
+title: "[Баг] "
+labels: [bug]
+body:
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Серьёзность
+      options: [Blocker, Critical, Major, Minor, Trivial]
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Приоритет
+      options: [P0, P1, P2, P3]
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Шаги для воспроизведения
+      placeholder: |
+        1. Открыть /api/quote
+        2. Отправить промокод "   "
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ожидаемый результат
+      placeholder: Код должен игнорироваться, скидка 0%
+  - type: textarea
+    id: actual
+    attributes:
+      label: Фактический результат
+      placeholder: Ошибка 422 "промокода нет"
+  - type: input
+    id: environment
+    attributes:
+      label: Окружение
+      placeholder: uv 0.5.x, python 3.12
