@@ -16,8 +16,8 @@ PROMO_CODE = "READMORE"
 PROMO_PCT = 15
 PROMO_MIN = 1500
 MAX_DISCOUNT_PCT = 25
-FREE_DELIVERY_FROM = 3000
-DELIVERY_FEE = 299
+FREE_DELIVERY_FROM = 2000
+DELIVERY_FEE = 199
 
 
 
@@ -50,7 +50,7 @@ def test_check_lines_qty_zero(params):
 
 
 # Этот тест падает, так как qty=10 не входит в range(1, 10). Это баг R-03.
-@pytest.mark.xfail(reason="#1 — MAX_QTY не включен в диапазон qty (строка 77)", strict=True)
+# @pytest.mark.xfail(reason="#1 — MAX_QTY не включен в диапазон qty (строка 77)", strict=True)
 def test_check_lines_boundary_qty(params):
     lines = [(1, MAX_QTY)]
     pricing.check_lines(lines, params)

@@ -1,31 +1,245 @@
-# Тест-кейсы (ЛР2). Формат — список YAML. Каждый кейс — отдельный элемент списка.
-#
-# Обязательные поля:
-#   id           TC-001, TC-002, … (уникальный)
-#   title        что проверяем, одной фразой
-#   technique    EP | BVA | DT | ST | EG
-#                (классы эквивалентности, граничные значения, таблица решений,
-#                 переходы состояний, предугадывание ошибок)
-#   requirement  R-01 … R-16 из docs/requirements.md
-#   priority     high | medium | low
-#   steps        список шагов
-#   expected     ожидаемый результат
-# Необязательные: preconditions, data, notes.
-#
-# В граничных кейсах пишите конкретные числа своего варианта, а не названия параметров:
-# автопроверка ищет значения вашего варианта.
-#
-# Пример (раскомментируйте и замените своими кейсами):
-#
-# - id: TC-001
-#   title: Курьерская доставка бесплатна ровно на пороге
-#   technique: BVA
-#   requirement: R-11
-#   priority: high
-#   preconditions: Каталог в исходном состоянии
-#   data: {goods_total: 3000.00, delivery: courier}
-#   steps:
-#     - Рассчитать заказ на 3 экземпляра книги id=5 (по 1000 ₽) без карты и промокода
-#     - Выбрать курьерскую доставку
-#   expected: delivery_cost = 0, total = 3000.00
-[]
+- id: TC-001
+  title: "BVA: Доставка бесплатна на пороге"
+  technique: BVA
+  requirement: R-11
+  priority: high
+  data: {goods_total: 2000.00, delivery: courier}
+  steps:
+    - Рассчитать заказ на 2000.00
+    - Выбрать курьерскую доставку
+  expected: delivery_cost = 0.00
+  tc: test_free_delivery_boundary
+
+- id: TC-002
+  title: "BVA: Доставка платна ниже порога"
+  technique: BVA
+  requirement: R-11
+  priority: high
+  data: {goods_total: 1999.99, delivery: courier}
+  steps:
+    - Рассчитать заказ на 1999.99
+    - Выбрать курьерскую доставку
+  expected: delivery_cost = 299.00
+  tc: test_free_delivery_boundary
+
+- id: TC-003
+  title: "EP: Неизвестный промокод"
+  technique: EP
+  requirement: R-08
+  priority: high
+  data: {promo: "WRONG"}
+  steps:
+    - Применить промокод
+  expected: RuleViolation
+  tc: test_promo_unknown
+
+- id: TC-004
+  title: "DT: Gold + Bulk + Promo (потолок)"
+  technique: DT
+  requirement: R-09
+  priority: high
+  data: {loyalty: gold, bulk: true, promo: true}
+  steps:
+    - Рассчитать скидку
+  expected: discount_percent = 25
+  tc: test_discount_dt_gold_all
+
+- id: TC-005
+  title: "EP: Промокод действует от суммы"
+  technique: EP
+  requirement: R-08
+  priority: high
+  data: {promo: "READMORE", goods_total: 1500.00}
+  steps:
+    - Рассчитать заказ на 1500.00
+  expected: discount_percent = 15
+  tc: test_promo_valid
+
+- id: TC-006
+  title: "EP: Промокод ниже суммы"
+  technique: EP
+  requirement: R-08
+  priority: high
+  data: {promo: "READMORE", goods_total: 1499.99}
+  steps:
+    - Рассчитать заказ на 1499.99
+  expected: RuleViolation
+  tc: test_promo_below_min
+
+- id: TC-007
+  title: "BVA: Граница оптовой скидки (товары)"
+  technique: BVA
+  requirement: R-07
+  priority: medium
+  data: {items_count: 9}
+  steps:
+    - Рассчитать заказ с 9 товарами
+  expected: bulk_discount = 0
+  tc: test_bulk_under
+
+- id: TC-008
+  title: "BVA: Граница оптовой скидки (товары)"
+  technique: BVA
+  requirement: R-07
+  priority: medium
+  data: {items_count: 10}
+  steps:
+    - Рассчитать заказ с 10 товарами
+  expected: bulk_discount = 5
+  tc: test_bulk_exact
+
+- id: TC-009
+  title: "ST: Переход NEW -> CANCELLED"
+  technique: ST
+  requirement: R-13
+  priority: high
+  data: {status: NEW}
+  steps:
+    - Выполнить cancel
+  expected: status = CANCELLED
+  tc: test_cancel_from_new
+
+- id: TC-010
+  title: "ST: Запрещенный переход PAID -> NEW"
+  technique: ST
+  requirement: R-13
+  priority: high
+  data: {status: PAID}
+  steps:
+    - Выполнить pay
+  expected: 409
+  tc: test_pay_paid_order
+
+- id: TC-011
+  title: "EG: Отрицательное количество"
+  technique: EG
+  requirement: R-03
+  priority: high
+  data: {qty: -1}
+  steps:
+    - Ввести qty -1
+  expected: RuleViolation
+  tc: test_negative_qty
+
+- id: TC-012
+  title: "EP: Пустая строка промокода"
+  technique: EP
+  requirement: R-08
+  priority: high
+  data: {promo: "   "}
+  steps:
+    - Ввести пробелы в промокод
+  expected: RuleViolation
+  tc: test_promo_empty_string
+
+- id: TC-013
+  title: "BVA: Граница MAX_ITEMS"
+  technique: BVA
+  requirement: R-02
+  priority: high
+  data: {positions: 5}
+  steps:
+    - Положить 5 разных книг в корзину
+  expected: check_lines = None
+  tc: test_check_lines_valid
+
+- id: TC-014
+  title: "BVA: Превышение MAX_ITEMS"
+  technique: BVA
+  requirement: R-02
+  priority: high
+  data: {positions: 6}
+  steps:
+    - Положить 6 разных книг в корзину
+  expected: RuleViolation
+  tc: test_check_lines_too_many_items
+
+- id: TC-015
+  title: "DT: Silver + Promo"
+  technique: DT
+  requirement: R-09
+  priority: high
+  data: {loyalty: silver, bulk: false, promo: true}
+  steps:
+    - Рассчитать скидку
+  expected: discount_percent = 20
+  tc: test_discount_dt_silver_promo
+
+- id: TC-016
+  title: "DT: Silver + Bulk"
+  technique: DT
+  requirement: R-09
+  priority: high
+  data: {loyalty: silver, bulk: true, promo: false}
+  steps:
+    - Рассчитать скидку
+  expected: discount_percent = 10
+  tc: test_discount_dt_silver_bulk
+
+- id: TC-017
+  title: "DT: Gold + Bulk"
+  technique: DT
+  requirement: R-09
+  priority: high
+  data: {loyalty: gold, bulk: true, promo: false}
+  steps:
+    - Рассчитать скидку
+  expected: discount_percent = 15
+  tc: test_discount_dt_gold_bulk
+
+- id: TC-018
+  title: "ST: DELIVERED -> PAID (запрещено)"
+  technique: ST
+  requirement: R-13
+  priority: high
+  data: {status: DELIVERED}
+  steps:
+    - Выполнить pay
+  expected: 409
+  tc: test_pay_delivered_order
+
+- id: TC-019
+  title: "EG: SQL Injection в имени"
+  technique: EG
+  requirement: R-05
+  priority: high
+  data: {name: "test'--"}
+  steps:
+    - Ввести имя со спецсимволами
+  expected: 400
+  tc: test_sql_injection_name
+
+- id: TC-020
+  title: "BVA: Граница PROMO_MIN"
+  technique: BVA
+  requirement: R-08
+  priority: high
+  data: {goods_total: 1499.99, promo: "READMORE"}
+  steps:
+    - Рассчитать с промокодом
+  expected: RuleViolation
+  tc: test_promo_below_min
+
+- id: TC-021
+  title: "BVA: Максимальное количество в позиции"
+  technique: BVA
+  requirement: R-03
+  priority: high
+  data: {qty: 10}
+  steps:
+    - Добавить одну книгу в количестве 10 экземпляров
+    - Рассчитать заказ
+  expected: "Позиция принимается"
+  tc: test_check_lines_boundary_qty
+
+- id: TC-022
+  title: "BVA: Превышение максимального количества"
+  technique: BVA
+  requirement: R-03
+  priority: high
+  data: {qty: 11}
+  steps:
+    - Добавить одну книгу в количестве 11 экземпляров
+    - Рассчитать заказ
+  expected: "RuleViolation"
+  tc: test_check_lines_qty_over_max

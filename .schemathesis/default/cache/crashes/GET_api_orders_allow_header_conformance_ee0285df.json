@@ -1,0 +1,87 @@
+{
+  "operation": "GET /api/orders",
+  "method": "OPTIONS",
+  "path_template": "/api/orders",
+  "fingerprint": "ee0285df",
+  "case_id": "KYhtWB",
+  "code_sample": "curl -X OPTIONS 'http://127.0.0.1:8000/api/orders?status=NEW'",
+  "sequence": [
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:8000/api/orders?status=NEW",
+      "url_template": "http://127.0.0.1:8000/api/orders",
+      "headers": {
+        "User-Agent": "schemathesis/4.33.0",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "X-Schemathesis-TestCaseId": "KYhtWB",
+        "Content-Length": "0"
+      },
+      "response": {
+        "status_code": 405,
+        "headers": {
+          "date": "Wed, 18 Nov 2026 09:22:09 GMT",
+          "server": "uvicorn",
+          "allow": "POST",
+          "content-length": "31",
+          "content-type": "application/json"
+        },
+        "body": "{\"detail\":\"Method Not Allowed\"}"
+      },
+      "link": null,
+      "checks": [
+        {
+          "name": "allow_header_conformance",
+          "status": "failure",
+          "message": "Allow header mismatch\n\n`Allow: POST` does not match the schema. Missing documented methods: GET\n\nList exactly the methods this resource supports in `Allow`"
+        }
+      ],
+      "meta": {
+        "generation": {
+          "time": 6.70000008540228e-06,
+          "mode": "negative"
+        },
+        "components": {
+          "QUERY": "positive"
+        },
+        "phase": {
+          "name": "coverage",
+          "data": {
+            "type": "CoveragePhaseData",
+            "description": "Unspecified HTTP method: OPTIONS",
+            "location": null,
+            "parameter": null,
+            "parameter_location": null,
+            "scenario": "unspecified_http_method"
+          }
+        },
+        "pool_draws": [],
+        "pool_misses": [],
+        "semantic_draws": [],
+        "dictionary_draws": [],
+        "constants_draws": [],
+        "raw_containers": {
+          "QUERY": {
+            "status": "NEW"
+          }
+        }
+      },
+      "path": "/api/orders",
+      "path_parameters": {},
+      "query": {
+        "status": "NEW"
+      },
+      "case_headers": {},
+      "cookies": {},
+      "case_body": {
+        "encoding": "none"
+      },
+      "media_type": null,
+      "parent_index": null,
+      "auth_identity": null,
+      "operation": "GET /api/orders"
+    }
+  ],
+  "aliases": []
+}

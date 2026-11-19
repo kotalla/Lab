@@ -1,0 +1,132 @@
+{
+  "operation": "POST /api/orders",
+  "method": "POST",
+  "path_template": "/api/orders",
+  "fingerprint": "5fd95ac5",
+  "case_id": "vve6rB",
+  "code_sample": "curl -X POST -H 'Content-Type: application/json' -d '{\"items\": [{\"\\u00f5\": [false, 7982640, null], \"\\b\": [-576460752303423488, null, null], \"book_id\": 301, \"qty\": 77981.0}, {\"A(\\u0017\": [{\"\\u0e01 \\u0e33\\u0e01\\u0e33\": null, \"\": null, \"\\udad6\\uded7\\u00d7\\u00a4\\u00fa\": 510509}], \"\": \"\\u00dd\\u0018\\ud9a5\\uddac\\u00c0\\u00c5:\\u00f2\", \"\\u0094\": -15944772948, \"\\udabf\\udcea\\u00e2\\udb66\\udd0c\": {}, \"7[\\u00cb\": \"\\u0014\\ud9fa\\udd25\\u00dd\", \"book_id\": 1380325706.0, \"qty\": 154}], \"customer\": {\"name\": \"000\", \"email\": \"\\u0098d@\\u0106.\\u00f6\\u00ca\"}, \"delivery\": \"pickup\"}' http://127.0.0.1:8000/api/orders",
+  "sequence": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:8000/api/orders",
+      "url_template": "http://127.0.0.1:8000/api/orders",
+      "headers": {
+        "User-Agent": "schemathesis/4.33.0",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "X-Schemathesis-TestCaseId": "vve6rB",
+        "Content-Type": "application/json",
+        "Content-Length": "506"
+      },
+      "response": {
+        "status_code": 500,
+        "headers": {
+          "date": "Wed, 18 Nov 2026 09:22:28 GMT",
+          "server": "uvicorn",
+          "content-length": "21",
+          "content-type": "text/plain; charset=utf-8"
+        },
+        "body": "Internal Server Error"
+      },
+      "link": null,
+      "checks": [
+        {
+          "name": "status_code_conformance",
+          "status": "failure",
+          "message": "Undocumented status code\n\nReceived: 500\nDocumented: 201, 400, 404, 409, 422"
+        }
+      ],
+      "meta": {
+        "generation": {
+          "time": 0.020659400000113237,
+          "mode": "positive"
+        },
+        "components": {
+          "BODY": "positive"
+        },
+        "phase": {
+          "name": "stateful",
+          "data": {
+            "type": "StatefulPhaseData",
+            "description": "Positive test case",
+            "location": null,
+            "parameter": null,
+            "parameter_location": null,
+            "mutations": []
+          }
+        },
+        "pool_draws": [],
+        "pool_misses": [],
+        "semantic_draws": [
+          {
+            "path": [
+              "customer",
+              "name"
+            ],
+            "type_token": "string",
+            "format_token": null,
+            "pattern_hash": null,
+            "normalized_name": "name",
+            "value": "000",
+            "source_operation": "POST /api/orders"
+          }
+        ],
+        "dictionary_draws": [],
+        "constants_draws": [],
+        "raw_containers": {}
+      },
+      "path": "/api/orders",
+      "path_parameters": {},
+      "query": {},
+      "case_headers": {},
+      "cookies": {},
+      "case_body": {
+        "encoding": "json",
+        "value": {
+          "items": [
+            {
+              "\u00f5": [
+                false,
+                7982640,
+                null
+              ],
+              "\b": [
+                -576460752303423488,
+                null,
+                null
+              ],
+              "book_id": 301,
+              "qty": 77981.0
+            },
+            {
+              "A(\u0017": [
+                {
+                  "\u0e01 \u0e33\u0e01\u0e33": null,
+                  "": null,
+                  "\udad6\uded7\u00d7\u00a4\u00fa": 510509
+                }
+              ],
+              "": "\u00dd\u0018\ud9a5\uddac\u00c0\u00c5:\u00f2",
+              "\u0094": -15944772948,
+              "\udabf\udcea\u00e2\udb66\udd0c": {},
+              "7[\u00cb": "\u0014\ud9fa\udd25\u00dd",
+              "book_id": 1380325706.0,
+              "qty": 154
+            }
+          ],
+          "customer": {
+            "name": "000",
+            "email": "\u0098d@\u0106.\u00f6\u00ca"
+          },
+          "delivery": "pickup"
+        }
+      },
+      "media_type": "application/json",
+      "parent_index": null,
+      "auth_identity": null,
+      "operation": "POST /api/orders"
+    }
+  ],
+  "aliases": []
+}

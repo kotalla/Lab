@@ -1,0 +1,95 @@
+{
+  "operation": "POST /api/quote",
+  "method": "POST",
+  "path_template": "/api/quote",
+  "fingerprint": "d3cab45d",
+  "case_id": "Mk6RaS",
+  "code_sample": "curl -X POST -H 'Content-Type: application/json' -d '{\"delivery\": \"courier\", \"items\": [{\"\\u00ae\\u00b3\\u00d1_X*$\\udb62\\udd97\\u00d4\\u00ac\\u00cd\\u00c1\\u00e3\\u00eb\": {\"\": null, \"\\u008f\\b\\u00ae\\\"\\u00a7\\u00f9\\ud83e\\udc19\\u0090\\u0012\": -65267216210546680, \"k\\udab3\\udc2e\\u00ef\\u0087L\\u0014\\ud82d\\udecdb<\\u00f6\\u000e\": 199731376651039}, \"book_id\": 2183662, \"qty\": 1897.0}]}' http://127.0.0.1:8000/api/quote",
+  "sequence": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:8000/api/quote",
+      "url_template": "http://127.0.0.1:8000/api/quote",
+      "headers": {
+        "User-Agent": "schemathesis/4.33.0",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "X-Schemathesis-TestCaseId": "Mk6RaS",
+        "Content-Type": "application/json",
+        "Content-Length": "312"
+      },
+      "response": {
+        "status_code": 500,
+        "headers": {
+          "date": "Wed, 18 Nov 2026 09:22:32 GMT",
+          "server": "uvicorn",
+          "content-length": "21",
+          "content-type": "text/plain; charset=utf-8"
+        },
+        "body": "Internal Server Error"
+      },
+      "link": null,
+      "checks": [
+        {
+          "name": "not_a_server_error",
+          "status": "failure",
+          "message": "Server error"
+        }
+      ],
+      "meta": {
+        "generation": {
+          "time": 0.0077896999998756655,
+          "mode": "positive"
+        },
+        "components": {
+          "BODY": "positive"
+        },
+        "phase": {
+          "name": "stateful",
+          "data": {
+            "type": "StatefulPhaseData",
+            "description": "Positive test case",
+            "location": null,
+            "parameter": null,
+            "parameter_location": null,
+            "mutations": []
+          }
+        },
+        "pool_draws": [],
+        "pool_misses": [],
+        "semantic_draws": [],
+        "dictionary_draws": [],
+        "constants_draws": [],
+        "raw_containers": {}
+      },
+      "path": "/api/quote",
+      "path_parameters": {},
+      "query": {},
+      "case_headers": {},
+      "cookies": {},
+      "case_body": {
+        "encoding": "json",
+        "value": {
+          "delivery": "courier",
+          "items": [
+            {
+              "\u00ae\u00b3\u00d1_X*$\udb62\udd97\u00d4\u00ac\u00cd\u00c1\u00e3\u00eb": {
+                "": null,
+                "\u008f\b\u00ae\"\u00a7\u00f9\ud83e\udc19\u0090\u0012": -65267216210546680,
+                "k\udab3\udc2e\u00ef\u0087L\u0014\ud82d\udecdb<\u00f6\u000e": 199731376651039
+              },
+              "book_id": 2183662,
+              "qty": 1897.0
+            }
+          ]
+        }
+      },
+      "media_type": "application/json",
+      "parent_index": null,
+      "auth_identity": null,
+      "operation": "POST /api/quote"
+    }
+  ],
+  "aliases": []
+}

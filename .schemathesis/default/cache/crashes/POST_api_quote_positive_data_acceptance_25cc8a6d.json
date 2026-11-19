@@ -1,0 +1,104 @@
+{
+  "operation": "POST /api/quote",
+  "method": "POST",
+  "path_template": "/api/quote",
+  "fingerprint": "25cc8a6d",
+  "case_id": "HeXXsY",
+  "code_sample": "curl -X POST -H 'Content-Type: application/json' -d '{\"items\": [{\"book_id\": 3, \"qty\": 1}], \"loyalty\": \"none\", \"promo_code\": \"0000000000000000000000000000000\", \"delivery\": \"pickup\"}' http://127.0.0.1:8000/api/quote",
+  "sequence": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:8000/api/quote",
+      "url_template": "http://127.0.0.1:8000/api/quote",
+      "headers": {
+        "User-Agent": "schemathesis/4.33.0",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "X-Schemathesis-TestCaseId": "HeXXsY",
+        "Content-Type": "application/json",
+        "Content-Length": "127"
+      },
+      "response": {
+        "status_code": 422,
+        "headers": {
+          "date": "Wed, 18 Nov 2026 09:22:10 GMT",
+          "server": "uvicorn",
+          "content-length": "112",
+          "content-type": "application/json"
+        },
+        "body": "{\"detail\":[{\"loc\":[\"body\",\"promo_code\"],\"msg\":\"\u0422\u0430\u043a\u043e\u0433\u043e \u043f\u0440\u043e\u043c\u043e\u043a\u043e\u0434\u0430 \u043d\u0435\u0442\",\"type\":\"business_rule\"}]}"
+      },
+      "link": null,
+      "checks": [
+        {
+          "name": "positive_data_acceptance",
+          "status": "failure",
+          "message": "Schema-valid request rejected\n\nValid data should have been accepted\nExpected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx"
+        }
+      ],
+      "meta": {
+        "generation": {
+          "time": 4.799999987881165e-05,
+          "mode": "positive"
+        },
+        "components": {
+          "BODY": "positive"
+        },
+        "phase": {
+          "name": "coverage",
+          "data": {
+            "type": "CoveragePhaseData",
+            "description": "Object with valid 'promo_code' value: Near-boundary length string",
+            "location": null,
+            "parameter": "application/json",
+            "parameter_location": "BODY",
+            "scenario": "valid_object"
+          }
+        },
+        "pool_draws": [
+          {
+            "location": "body",
+            "parameter_name": "items/0/book_id",
+            "resource_name": "Book",
+            "resource_field": "id",
+            "source_operation": "GET /api/books",
+            "source_status": 200,
+            "source_identity": null,
+            "source_input": false,
+            "source_query": null
+          }
+        ],
+        "pool_misses": [],
+        "semantic_draws": [],
+        "dictionary_draws": [],
+        "constants_draws": [],
+        "raw_containers": {}
+      },
+      "path": "/api/quote",
+      "path_parameters": {},
+      "query": {},
+      "case_headers": {},
+      "cookies": {},
+      "case_body": {
+        "encoding": "json",
+        "value": {
+          "items": [
+            {
+              "book_id": 3,
+              "qty": 1
+            }
+          ],
+          "loyalty": "none",
+          "promo_code": "0000000000000000000000000000000",
+          "delivery": "pickup"
+        }
+      },
+      "media_type": "application/json",
+      "parent_index": null,
+      "auth_identity": null,
+      "operation": "POST /api/quote"
+    }
+  ],
+  "aliases": []
+}
