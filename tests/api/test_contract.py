@@ -15,6 +15,7 @@ schema.exclude(path="/api/orders", method="OPTIONS")
 schema.exclude(path="/api/orders", method="POST")
 schema.exclude(path="/api/quote", method="POST")
 
+
 @schema.parametrize()
 @settings(max_examples=10, derandomize=True)
 def test_api_matches_schema(case):

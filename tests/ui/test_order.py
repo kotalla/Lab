@@ -1,5 +1,6 @@
 import pytest
 from playwright.sync_api import Page
+
 from tests.ui.pages.catalog_page import CatalogPage
 from tests.ui.pages.order_page import OrderPage
 
@@ -20,7 +21,7 @@ def test_cancel_order_with_dialog(page: Page):
     """Сценарий 5: создание заказа и последующая отмена через диалог."""
     # Отмечаем как ожидаемо падающий из-за бага #6
     pytest.xfail("Issue #6: Статус заказа не меняется на CANCELLED после отмены")
-    
+
     catalog = CatalogPage(page).open()
     catalog.set_book_qty("Евгений Онегин", 1)
     catalog.fill_customer(name="Иван Иванов", email="ivan@example.ru")

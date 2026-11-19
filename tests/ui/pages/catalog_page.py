@@ -49,7 +49,4 @@ class CatalogPage:
 
     def expect_error_visible(self) -> None:
         expect(self.error_alert).to_be_visible()
-        expect(self.error_alert).to_contain_text(
-        "Выберите хотя бы одну книгу"
-    )
-
+        expect(self.error_alert).to_contain_text("Выберите хотя бы одну книгу")

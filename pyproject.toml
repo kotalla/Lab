@@ -54,7 +54,7 @@ omit = ["*/__main__.py"]
 
 [tool.coverage.report]
 show_missing = true
-# ЛР4: добавьте порог покрытия fail_under
+fail_under = 80
 
 [tool.ruff]
 line-length = 100
@@ -63,5 +63,10 @@ target-version = "py313"
 extend-exclude = ["grader"]
 
 [tool.ruff.lint]
-# ЛР4: расширьте набор правил (см. lab-4)
-select = ["E", "F", "I", "UP"]
+select = ["E", "F", "I", "UP", "B", "PT"]
+
+[tool.mutmut]
+source_paths = ["src/bookshop"]
+only_mutate = ["src/bookshop/pricing.py", "src/bookshop/orders.py"]
+pytest_add_cli_args_test_selection = ["tests/unit"]
+also_copy = ["variant.toml"]

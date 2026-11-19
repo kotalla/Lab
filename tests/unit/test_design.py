@@ -1,7 +1,8 @@
-import pytest
 from decimal import Decimal
 
-from hypothesis import given, settings, strategies as st
+import pytest
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from bookshop import pricing
 from bookshop.pricing import Line, RuleViolation
@@ -32,11 +33,14 @@ from bookshop.pricing import Line, RuleViolation
     ],
 )
 def test_free_delivery_boundary(params, goods_total, expected_cost):
-    assert pricing.delivery_cost(
-        goods_total,
-        "courier",
-        params,
-    ) == expected_cost
+    assert (
+        pricing.delivery_cost(
+            goods_total,
+            "courier",
+            params,
+        )
+        == expected_cost
+    )
 
 
 # DT: таблица решений по скидкам
@@ -121,11 +125,11 @@ def test_discount_decision_table(
             id="ep_unknown",
         ),
         pytest.param(
-    "   ",
-    False,
-    marks=pytest.mark.tc("TC-018"),
-    id="ep_empty",
-),
+            "   ",
+            False,
+            marks=pytest.mark.tc("TC-018"),
+            id="ep_empty",
+        ),
         pytest.param(
             None,
             False,
@@ -143,11 +147,14 @@ def test_promo_equivalence_classes(params, promo, expected):
                 params,
             )
     else:
-        assert pricing.promo_applies(
-            promo,
-            Decimal("2000"),
-            params,
-        ) is expected
+        assert (
+            pricing.promo_applies(
+                promo,
+                Decimal("2000"),
+                params,
+            )
+            is expected
+        )
 
 
 # Hypothesis: проверка формулы итоговой суммы
@@ -188,12 +195,7 @@ def test_total_consistency_property(params, price, qty):
         delivery="courier",
     )
 
-    assert quote.total == (
-        quote.subtotal
-        - quote.discount
-        + quote.delivery_cost
-    )
-    from hypothesis import given, settings, strategies as st
+    assert quote.total == (quote.subtotal - quote.discount + quote.delivery_cost)
 
 
 @pytest.mark.tc("TC-004")

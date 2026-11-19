@@ -1,4 +1,5 @@
 from playwright.sync_api import Page
+
 from tests.ui.pages.catalog_page import CatalogPage
 
 

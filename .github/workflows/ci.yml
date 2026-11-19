@@ -1,19 +1,105 @@
 name: CI
-
-on:
-  push:
-  pull_request:
-
-permissions:
-  contents: read
+on: [push, pull_request]
 
 jobs:
-  tests:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: astral-sh/setup-uv@v10.3.3
-        with:
-          enable-cache: true
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
       - run: uv sync
-      - run: uv run pytest --ignore=tests/ui
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+
+  unit:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - run: uv run pytest tests/unit --alluredir=allure-results
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-unit
+          path: allure-results
+
+  api:
+    needs: unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - run: uv run pytest tests/unit tests/api --cov=bookshop --cov-branch --cov-report=term-missing --cov-fail-under=80 --alluredir=allure-results
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-api
+          path: allure-results
+
+  e2e:
+    needs: api
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - run: uv run playwright install --with-deps chromium
+      - run: uv run pytest tests/ui --alluredir=allure-results
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-e2e
+          path: allure-results
+
+  mutation:
+    needs: unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - run: uv run mutmut run
+      - run: uv run mutmut results
+      - run: uv run mutmut export-cicd-stats
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mutmut-stats
+          path: mutants/mutmut-cicd-stats.json
+
+  load:
+    needs: api
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - run: |
+          uv run bookshop --port 8000 &
+          curl --retry 20 --retry-connrefused --retry-delay 1 http://127.0.0.1:8000/api/health
+      - uses: grafana/setup-k6-action@v1
+      - uses: grafana/run-k6-action@v1
+        with:
+          path: load/smoke.js
+          env: BASE_URL=http://127.0.0.1:8000
+
+  report:
+    needs: [unit, api, e2e]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: allure-*
+          merge-multiple: true
+          path: allure-results
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npx --yes allure@3 generate allure-results --output allure-report
+      - uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
